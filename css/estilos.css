@@ -1,0 +1,91 @@
+body {
+  background: url('https://wallpapersite.com/images/pages/pic_w/901.jpg') no-repeat fixed;
+  background-size: 100% 100%;
+}
+
+input {
+  -webkit-box-shadow:inset 0 0 5px 5px #888;
+    box-shadow:inset 0 0 5px 5px #888;
+}
+
+#main {
+  padding-top: 60px;
+}
+
+#error .modal-header{
+  color:white;
+  padding:9px 15px;
+  border-bottom:1px solid #eee;
+  background-color: red;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.list-group-item {
+  background-color: rgba(255,255,255,.9);
+}
+
+.navbar {
+  background-color: rgba(255,255,255,.9);
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeOut;
+  animation-name: fadeOut;
+}

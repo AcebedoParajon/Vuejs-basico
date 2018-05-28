@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>VueJs | Iniciando</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/estilos.css">
+
+</head>
+
+<body>
+
+<div id="main" class="panel panel-default">
+	<nav class="nav navbar fixed-top text-center">
+	    <a href="#" @click="crearUsuario" v-if="!creaUsuario && login" class="btn btn-success">Crear usuario</a>
+	    <a href="#" @click="crearUsuario" v-if="creaUsuario && login" class="btn btn-success">Cancelar creación</a>
+	    <a href="#" v-if="!login" class="btn btn-success" data-toggle="modal" data-target="#login">Entrar con email</a>
+	    <a href="#" @click="loginGoogle" v-if="!login" class="btn btn-success">Entra con Google</a>
+	    <a href="#" v-if="!login" class="btn btn-success" data-toggle="modal" data-target="#registro">Registrarse</a>
+	    <a href="#" @click="logout" v-if="login" class="btn btn-warning">Logout</a>
+	    <a href="#" @click="listaUsuarios" v-if="!muestraUsuarios" class="btn btn-info">Listar usuarios</a>
+	    <a href="#" @click="listaUsuarios" v-if="muestraUsuarios" class="btn btn-info">Ocultar usuarios</a>
+	    <a href="#" @click="listaPersonas" v-if="!muestraPersonas" class="btn btn-primary">Listar personas</a>
+	    <a href="#" @click="listaPersonas" v-if="muestraPersonas" class="btn btn-primary">Ocultar personas</a>
+	</nav>
+
+	<nuevos-usuarios 
+		v-show="creaUsuario" 
+		:usuarios="usuarios">
+	</nuevos-usuarios>
+
+	<muestra-usuarios
+		v-model="usuarios" 
+		:usuarios="usuarios" 
+		:logeado="login"
+		v-show="muestraUsuarios">
+	</muestra-usuarios>
+
+	<muestra-personas 
+		:personas="personas"
+		v-show="muestraPersonas">
+	</muestra-personas>
+
+	<registro-usuarios
+		:nombre="nuevoNombre"
+		:apellidos="nuevoApellidos"
+		:poblacion="nuevoPoblacion"
+		:email2="email2"
+		:password1="password1"
+		:password2="password2">
+	</registro-usuarios>
+
+	<edita-usuario
+		v-model="usuarios"
+		:usuarios="usuarios">
+	</edita-usuario>
+
+	<muestra-error>
+	</muestra-error>
+
+	<muestra-aviso>
+	</muestra-aviso>
+
+	<!-- Modal de login -->
+	<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h6 class="modal-title">Introducca sus datos</h6>
+	        </div>
+	        <div class="modal-body">
+	          <form @submit.prevent="loginNormal" method="post">
+	            <fieldset>
+	              <div class="form-group">
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen">
+	                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input id="email" name="email" type="email" placeholder="Correo electrónico" class="form-control" v-model="email" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen"> 
+	                		<i class="input-group-text fas fa-lock-open fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input id="password" name="password" type="password" placeholder="contraseña" class="form-control" v-model="password" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 text-xs-center">
+	                  <button class="btn btn-success btn-lg">Iniciar sesión</button>
+	                  <button type="reset" class="btn btn-default btn-lg" data-dismiss="modal">Cancelar</button>
+	                </div>
+	              </div>
+	              <p>¿No estás registrado? <a href="#" data-toggle="modal" data-target="#registro">registrate aquí</a></p>
+	            </fieldset>
+	          </form>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+
+</div>
+
+<!-- Modal Error -->
+<template id="modal-error">
+	<div id="error" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h6 class="modal-title">Error!!!</h6>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		      </button>
+	        </div>
+	        <div class="modal-body">
+	          <p> {{ error }} </p>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</template>
+
+<!-- Modal Aviso -->
+<template id="modal-aviso">
+	<div id="aviso" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h6 class="modal-title">Aviso!!</h6>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		      </button>
+	        </div>
+	        <div class="modal-body">
+	          <p> {{ aviso }} </p>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</template>
+
+<!-- Modal de registro -->
+<template id="modal-registro">
+	<div class="modal fade" id="registro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h6 class="modal-title">Introducca sus datos</h6>
+	        </div>
+	        <div class="modal-body">
+	          <form @submit.prevent="registro" method="post">
+	            <fieldset>
+            		<div class="form-group">
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input id="nombre" name="nombre" type="text" placeholder="Nombre (opcional)" class="form-control" v-model="nuevoNombre" />
+		                </div>
+	               </div>
+	               <div class="form-group">
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input id="apellidos" name="apellidos" type="text" placeholder="Apellidos (opcional)" class="form-control" v-model="nuevoApellidos" />
+		                </div>
+	               </div>
+	               <div class="form-group">
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input id="poblacion" name="poblacion" type="text" placeholder="Poblacion (opcional)" class="form-control" v-model="nuevoPoblacion" />
+		                </div>
+	               </div>
+	              <div class="form-group">
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen">
+	                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input id="email2" name="email2" type="email" placeholder="Correo electrónico" class="form-control" v-model="email2" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen"> 
+	                		<i class="input-group-text fas fa-lock-open fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input id="password1" name="password1" type="password" placeholder="contraseña" class="form-control" v-model="password1" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen"> 
+	                		<i class="input-group-text fas fa-lock-open fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input id="password2" name="password2" type="password" placeholder="Repetir contraseña" class="form-control" v-model="password2" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 text-xs-center">
+	                  <button class="btn btn-success btn-lg">Registrarse</button>
+	                  <button type="reset" class="btn btn-default btn-lg" data-dismiss="modal">Cancelar</button>
+	                </div>
+	              </div>
+	            </fieldset>
+	          </form>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</template>
+
+<template id="nuevo-usuario">
+	<div class="panel-body">
+		<h1 class="panel-title"><strong>Nuevo usuario:</strong></h1>
+		<form @submit.prevent="writeUserData">
+			<div class="panel">
+				<div class="col-md-6">
+					<label><h6>Nombre:</h6></label>
+					<div class="form-group">
+						<input type="text" placeholder="Nombre" class="form-control" v-model="nuevoNombre">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<label><h6>Apellidos:</h6></label>
+					<div class="form-group">
+						<input type="text" placeholder="Apellidos" class="form-control" v-model="nuevoApellidos">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<label><h6>Población:</h6></label>
+					<div class="form-group">
+						<input type="text" placeholder="Poblacion" class="form-control" v-model="nuevoPoblacion">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<label><h6>Correo:</h6></label>
+					<div class="form-group">
+						<input @keydown.enter.stop.prevent type="email" placeholder="Correo-e" class="form-control" v-model="nuevoCorreo">
+					</div>
+				</div>
+				<transition name="animate.css" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+					<button v-if="todaLaInformacion" type="submit" class="btn btn-info">Enviar datos</button>
+				</transition>
+			</div>
+		</form>
+	</div>
+</template>
+
+<!-- Modal Editar Usuario -->
+<template id="modal-editarusuario">
+	<div class="modal fade" id="edicion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h6 class="modal-title">Introducca los datos a modificar</h6>
+	        </div>
+	        <div class="modal-body">
+	          <form @submit.prevent="modificarUsuario" method="post">
+	            <fieldset>
+            		<div class="form-group">
+										<label for="nombre"><h6>Nombre:</h5></label>
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text far fa-user fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input name="nombre" type="text" autofocus v-model="nombreEditado" class="form-control" />
+		                </div>
+	               </div>
+	               <div class="form-group">
+									 <label for="apellidos"><h6>Apellidos:</h6></label>
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text far fa-user fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input name="apellidos" type="text" v-model="apellidoEditado" class="form-control" />
+		                </div>
+	               </div>
+	               <div class="form-group">
+									 <label for="poblacion">
+										 <h6>Población:</h6>
+									 </label>
+		                <div class="col-md-12 input-group">
+		                	<div class="input-group-appen">
+		                		<i class="input-group-text fas fa-home fa-2x bigicon input-group-addon "></i>
+		                	</div>
+		                  <input name="poblacion" type="text" v-model="poblacionEditado" class="form-control" />
+		                </div>
+	               </div>
+	              <div class="form-group">
+									<label for="correo">
+										<h6>Correo:</h6>
+									</label>
+	                <div class="col-md-12 input-group">
+	                	<div class="input-group-appen">
+	                		<i class="input-group-text fas fa-envelope-square fa-2x bigicon input-group-addon "></i>
+	                	</div>
+	                  <input name="email" type="email" v-model="correoEditado" class="form-control" required />
+	                </div>
+	              </div>
+	              <div class="form-group">
+	                <div class="col-md-12 text-xs-center">
+	                  <button class="btn btn-success btn-lg">Modificar</button>
+	                  <button type="reset" class="btn btn-default btn-lg" data-dismiss="modal">Cancelar</button>
+	                </div>
+	              </div>
+	            </fieldset>
+	          </form>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</template>
+
+<template id="mostrar-usuarios">
+	<div class="panel-body">
+		<h2 class="panel-title">Nuevas entradas <small>(desde firebase)</small></h2>
+		<ul class="list-group">
+			<li v-for="persona in usuarios" class="list-group-item">
+				<p><strong>Nombre:</strong> 
+					<span>{{ persona.nombre }}</span>
+					<span class="float-right">
+						<a href="#" v-if="logeado" @click="editarUsuario(persona.key)" class="btn btn-warning" data-toggle="modal" data-target="#edicion">Editar</a>
+						<a href="#" v-if="logeado" @click="eliminarUsuario(persona.key)" class="btn btn-danger">Eliminar</a>
+					</span>
+				</p>
+				<hr>
+				<p><strong>Apellidos:</strong>  
+					<span>{{ persona.apellidos }}</span>
+				</p>
+				<hr>
+				<p><strong>Poblacion:</strong> 
+					<span >{{ persona.poblacion }}</span>
+				</p>
+				<hr>
+				<p><strong>Correo:</strong> 
+					<span>{{ persona.correo }}</span>
+				</p>
+			</li>
+		</ul>
+	</div>
+</template>
+
+<!-- Listado de personas obtenido desde la url 'https://randomuser.me/api/?results=20' -->
+<template id="listar-personas">
+	<div class="panel-body">
+		<h2 class="panel-title">Listado de personas <small>(desde url)</small></h2>
+		<ul class="list-group">
+			<li v-for="persona in personas" class="list-group-item">
+				<p>
+					<strong>Nombre:</strong>  {{ persona.name.first }}
+					<span class="float-right">
+						<img :src="persona.picture.thumbnail" :alt="persona.name.first">
+					</span>
+				</p>
+				<hr>
+				<p><strong>Apellidos:</strong>  {{ persona.name.last }}</p>
+				<hr>
+				<p><strong>Poblacion:</strong>  {{ persona.location.city }}</p>
+				<hr>
+				<p><strong>Correo:</strong>  {{ persona.email }}</p>
+			</li>
+		</ul>
+	</div>
+</template>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+<!-- Vue development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+<script>
+	// Inicializamos Firebase con los datos que nos proporciona
+	// al crear nuestra database.
+  var config = {
+    apiKey: "AIzaSyBEie8ESh03DHHTBPFHYbhyv_wEJuHCMw0",
+    authDomain: "datos-firebase.firebaseapp.com",
+    databaseURL: "https://datos-firebase.firebaseio.com",
+    projectId: "datos-firebase",
+    storageBucket: "datos-firebase.appspot.com",
+    messagingSenderId: "745374585974"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="js/main.js"></script>	
+
+
+<script src="//localhost:35729/livereload.js"></script>
+
+</body>
+</html>
