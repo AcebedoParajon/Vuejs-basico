@@ -2,6 +2,7 @@ var longitud = 0;
 const db = firebase.database();
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
+const provider2 = new firebase.auth.FacebookAuthProvider();
 var error = '';
 bus = new Vue();
 
@@ -253,8 +254,16 @@ var vm = new Vue({
 	// Referenciamos a la base de datos de Firebase y, con el evento 'on' escuchamos
 	// si hay cambios en ella y llamamos a la función 'cargarUsuarios' para obtenerlos.
 	created() {
-		db.ref('users/')
-			.on('value', snapshot => this.cargarUsuarios(snapshot.val()));
+		db.ref('users/').on('value', snapshot => this.cargarUsuarios(snapshot.val()));
+		// Comprobamos si existe un inicio de sesión
+		firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+			  this.login = true;
+			} else {
+			  // No hay usuario logueado.
+			  this.login = false;
+			}
+		});  
 	},
 
 	data: {
@@ -325,6 +334,41 @@ var vm = new Vue({
 				$('#error').modal('show');
 			 
 			});
+		},
+
+		// Login con Facebook
+		loginFacebook: function(){
+			firebase.auth().signInWithPopup(provider2).then((result) => {
+				// This gives you a Facebook Access Token. You can use it to access the Facebook API.
+				var token = result.credential.accessToken;
+				// The signed-in user info.
+				var user = result.user;
+				// ...
+				this.login = true;
+				this.aviso = 'Has sido logueado con éxito !!!';
+				bus.$emit('aviso',this.aviso);
+				$('#aviso').modal('show');
+				console.log(user);
+			  }).catch((error) => {
+				// Handle Errors here.
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				// The email of the user's account used.
+				var email = error.email;
+				// The firebase.auth.AuthCredential type that was used.
+				var credential = error.credential;
+				// ...
+				if (errorMessage = 'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.'){
+					this.err = 'Ya existe una cuenta con el mismo correo pero diferentes credenciales. Entra usando un proveedor asociado a ese correo.'
+				}else{
+					this.err = 'Ha ocurrido un problema.'
+				}
+
+				console.log('Error: ',errorMessage);
+				console.log('Error: ',credential);
+				bus.$emit('error',this.err);
+				$('#error').modal('show');
+			  });
 		},
 
 		// Logout de firebase

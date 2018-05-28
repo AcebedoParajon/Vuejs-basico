@@ -16,7 +16,8 @@
 	    <a href="#" @click="crearUsuario" v-if="!creaUsuario && login" class="btn btn-success">Crear usuario</a>
 	    <a href="#" @click="crearUsuario" v-if="creaUsuario && login" class="btn btn-success">Cancelar creación</a>
 	    <a href="#" v-if="!login" class="btn btn-success" data-toggle="modal" data-target="#login">Entrar con email</a>
-	    <a href="#" @click="loginGoogle" v-if="!login" class="btn btn-success">Entra con Google</a>
+			<a href="#" @click="loginGoogle" v-if="!login" class="btn btn-success">Entra con Google</a>
+			<a href="#" @click="loginFacebook" v-if="!login" class="btn btn-success">Entra con Facebook</a>
 	    <a href="#" v-if="!login" class="btn btn-success" data-toggle="modal" data-target="#registro">Registrarse</a>
 	    <a href="#" @click="logout" v-if="login" class="btn btn-warning">Logout</a>
 	    <a href="#" @click="listaUsuarios" v-if="!muestraUsuarios" class="btn btn-info">Listar usuarios</a>
@@ -387,10 +388,10 @@
 	// al crear nuestra database.
   var config = {
     apiKey: "AIzaSyBEie8ESh03DHHTBPFHYbhyv_wEJuHCMw0",
-    authDomain: "datos-firebase.firebaseapp.com",
-    databaseURL: "https://datos-firebase.firebaseio.com",
-    projectId: "datos-firebase",
-    storageBucket: "datos-firebase.appspot.com",
+    authDomain: "curso-vuejs-47c99.firebaseapp.com",
+    databaseURL: "https://curso-vuejs-47c99.firebaseio.com",
+    projectId: "curso-vuejs-47c99",
+    storageBucket: "curso-vuejs-47c99.appspot.com",
     messagingSenderId: "745374585974"
   };
   firebase.initializeApp(config);
