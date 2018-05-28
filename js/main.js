@@ -183,7 +183,8 @@ Vue.component('edita-usuario',{
 			this.apellidoEditado = this.usuarioEditado.apellidos;
 			this.poblacionEditado = this.usuarioEditado.poblacion;
 			this.correoEditado = this.usuarioEditado.correo;
-		});
+			});
+		}
 	},
 	
 });
