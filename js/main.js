@@ -178,11 +178,7 @@ Vue.component('edita-usuario',{
 				this.error = 'Ha ocurrido algún problema !!!';
 				bus.$emit('error',this.error);
 				$('#error').modal('show');
-			// this.usuarioEditado = usuarioEditado;
-			// this.nombreEditado = this.usuarioEditado.nombre;
-			// this.apellidoEditado = this.usuarioEditado.apellidos;
-			// this.poblacionEditado = this.usuarioEditado.poblacion;
-			// this.correoEditado = this.usuarioEditado.correo;
+			
 			});
 		}
 	},
