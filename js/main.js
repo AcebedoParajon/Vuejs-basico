@@ -56,7 +56,6 @@ Vue.component('registro-usuarios',{
 							correo: this.email,
 							poblacion: this.nuevoPoblacion
 						}
-						console.log(usuario);
 						db.ref('users/').push(usuario);
 
 					});
@@ -322,8 +321,7 @@ var vm = new Vue({
 		// Login con Google en firebase
 		loginGoogle: function(){
 			auth.signInWithPopup(provider).then((result) => {
-				console.log(result.user);
-				this.login = true;
+	 			this.login = true;
 			}).then(() => {
 				this.aviso = 'Has sido logueado con éxito !!!';
 				bus.$emit('aviso',this.aviso);
@@ -348,7 +346,6 @@ var vm = new Vue({
 				this.aviso = 'Has sido logueado con éxito !!!';
 				bus.$emit('aviso',this.aviso);
 				$('#aviso').modal('show');
-				console.log(user);
 			  }).catch((error) => {
 				// Handle Errors here.
 				var errorCode = error.code;
@@ -363,9 +360,6 @@ var vm = new Vue({
 				}else{
 					this.err = 'Ha ocurrido un problema.'
 				}
-
-				console.log('Error: ',errorMessage);
-				console.log('Error: ',credential);
 				bus.$emit('error',this.err);
 				$('#error').modal('show');
 			  });
