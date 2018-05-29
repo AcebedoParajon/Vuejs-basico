@@ -184,7 +184,6 @@ Vue.component('edita-usuario',{
 	},
 	created() {
 		bus.$on('editado',(usuarioEditado,clave) => {
-			console.log(usuarioEditado);
 
 			this.usuarioEditado = usuarioEditado;
 			this.nombreEditado = this.usuarioEditado.nombre;
@@ -262,9 +261,10 @@ var vm = new Vue({
 	// si hay cambios en ella y llamamos a la función 'cargarUsuarios' para obtenerlos.
 	created() {
 		db.ref('users/').on('value', snapshot => this.cargarUsuarios(snapshot.val()));
-		// Comprobamos si existe un inicio de sesión
+		// También comprobamos si existe un inicio de sesión activo
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
+				// Si existe un usuario activo.
 			  this.login = true;
 			} else {
 			  // No hay usuario logueado.
@@ -330,7 +330,6 @@ var vm = new Vue({
 		loginGoogle: function(){
 			auth.signInWithPopup(provider).then((result) => {
 				 this.login = true;
-				 console.log(result);
 			}).then(() => {
 				this.aviso = 'Has sido logueado con éxito !!!';
 				bus.$emit('aviso',this.aviso);
