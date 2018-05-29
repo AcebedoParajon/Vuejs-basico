@@ -329,7 +329,8 @@ var vm = new Vue({
 		// Login con Google en firebase
 		loginGoogle: function(){
 			auth.signInWithPopup(provider).then((result) => {
-	 			this.login = true;
+				 this.login = true;
+				 console.log(result);
 			}).then(() => {
 				this.aviso = 'Has sido logueado con éxito !!!';
 				bus.$emit('aviso',this.aviso);
