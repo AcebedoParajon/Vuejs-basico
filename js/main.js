@@ -285,6 +285,8 @@ var vm = new Vue({
 		email2: '',
 		password1: '',
 		password2: '',
+		uid: null,
+		master: false,
 		muestraUsuarios: false,
 		creaUsuario: false,
 		muestraPersonas: false,
@@ -330,6 +332,8 @@ var vm = new Vue({
 		loginGoogle: function(){
 			auth.signInWithPopup(provider).then((result) => {
 				 this.login = true;
+				 this.uid = result.user.uid;
+				 if (this.uid = 'v4K15i1DjPdUc4L9mC6n6ULqYXT2') this.master = true;
 			}).then(() => {
 				this.aviso = 'Has sido logueado con éxito !!!';
 				bus.$emit('aviso',this.aviso);

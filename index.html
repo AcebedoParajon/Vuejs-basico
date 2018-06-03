@@ -13,7 +13,7 @@
 
 <div id="main" class="panel panel-default">
 	<nav class="nav navbar fixed-top text-center">
-	    <a href="#" @click="crearUsuario" v-if="!creaUsuario && login" class="btn btn-success">Crear usuario</a>
+	    <a href="#" @click="crearUsuario" v-if="!creaUsuario && master" class="btn btn-success">Crear usuario</a>
 	    <a href="#" @click="crearUsuario" v-if="creaUsuario && login" class="btn btn-success">Cancelar creación</a>
 	    <a href="#" v-if="!login" class="btn btn-success" data-toggle="modal" data-target="#login">Entrar con email</a>
 			<a href="#" @click="loginGoogle" v-if="!login" class="btn btn-success">Entra con Google</a>
@@ -391,7 +391,7 @@
     authDomain: "curso-vuejs-47c99.firebaseapp.com",
     databaseURL: "https://curso-vuejs-47c99.firebaseio.com",
     projectId: "curso-vuejs-47c99",
-    storageBucket: "NombreApcurso-vuejs-47c99licacion.appspot.com",
+    storageBucket: "curso-vuejs-47c99licacion.appspot.com",
     messagingSenderId: "745374585974"
   };
   firebase.initializeApp(config);
