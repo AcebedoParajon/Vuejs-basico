@@ -349,15 +349,15 @@
 
 <!-- Listado de personas obtenido desde la url 'https://randomuser.me/api/?results=20' -->
 <template id="listar-personas">
-	<div class="panel-body">
-		<h2 class="panel-title">Listado de personas <small>(desde url)</small></h2>
-		<ul class="list-group">
-			<li v-for="persona in personas" class="list-group-item">
+	<div id="personas">
+		<h2>Listado de personas <small>(desde url)</small></h2>
+		<ul>
+			<li v-for="persona in personas">
+				<p>
+						<img class="img-thumbnail" :src="persona.picture.large" :alt="persona.name.first">
+				</p>
 				<p>
 					<strong>Nombre:</strong>  {{ persona.name.first }}
-					<span class="float-right">
-						<img :src="persona.picture.thumbnail" :alt="persona.name.first">
-					</span>
 				</p>
 				<hr>
 				<p><strong>Apellidos:</strong>  {{ persona.name.last }}</p>
